@@ -1,0 +1,15 @@
+# MT5 compiled
+*.ex5
+
+# MT5 logs
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+*~
