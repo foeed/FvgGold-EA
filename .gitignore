@@ -1,6 +1,12 @@
 # MT5 compiled
 *.ex5
 
+# MQL5 logos (for Market upload only)
+mql5_card_200.png
+mql5_showcase_140.png
+mql5_platform_60.png
+mql5_logo.svg
+
 # MT5 logs
 *.log
 
