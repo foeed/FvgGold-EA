@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="goldLight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Three candles representing FVG -->
+  <g transform="translate(4, 4)" filter="url(#glow)">
+    <!-- Candle 1 -->
+    <rect x="0" y="10" width="12" height="36" rx="2" fill="url(#gold)" opacity="0.5"/>
+    <rect x="3" y="4" width="6" height="48" rx="1" fill="url(#gold)" opacity="0.7"/>
+
+    <!-- Gap -->
+    <rect x="14" y="16" width="14" height="20" rx="2" fill="url(#gold)" opacity="0.12" stroke="url(#gold)" stroke-width="1" stroke-dasharray="2,2"/>
+    <path d="M17 18 L21 23 L25 18" fill="none" stroke="url(#goldLight)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M17 34 L21 29 L25 34" fill="none" stroke="url(#goldLight)" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Candle 2 (impulse) -->
+    <rect x="30" y="6" width="12" height="42" rx="2" fill="url(#gold)" opacity="0.6"/>
+    <rect x="33" y="1" width="6" height="52" rx="1" fill="url(#gold)"/>
+
+    <!-- Candle 3 -->
+    <rect x="44" y="12" width="12" height="32" rx="2" fill="url(#gold)" opacity="0.5"/>
+    <rect x="47" y="7" width="6" height="42" rx="1" fill="url(#gold)" opacity="0.8"/>
+  </g>
+</svg>

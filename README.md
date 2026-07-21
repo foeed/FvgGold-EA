@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.svg" alt="FvgGold Logo" width="400">
+</p>
+
 # FvgGold — XAUUSD Fair Value Gap (FVG) Trading Bot for MetaTrader 5
 
 **Algorithmic gold trading EA** that identifies high-probability Fair Value Gap setups with Order Block confluence, H1 EMA trend filter, and London/NY killzone timing. Built for XAUUSD on MetaTrader 5.
@@ -245,7 +249,11 @@ FvgGold-EA/
 ├── FvgGold.mq5       # EA source code (MQL5)
 ├── FvgGold.set       # Optimized parameter set
 ├── docs/
-│   └── index.html    # Landing page (GitHub Pages)
+│   ├── index.html    # Landing page (GitHub Pages)
+│   ├── logo.svg      # Full logo (icon + text)
+│   ├── icon.svg      # Icon only (favicon)
+│   ├── sitemap.xml   # SEO sitemap
+│   └── robots.txt    # SEO robots
 ├── LICENSE            # MIT License
 └── README.md          # This file
 ```

@@ -29,6 +29,7 @@
     <link rel="alternate" type="application/rss+xml" title="FvgGold EA" href="https://github.com/foeed/FvgGold-EA/releases.atom">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -74,12 +75,14 @@
         }
 
         .logo {
-            font-size: 1.25rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
         }
 
-        .logo span { color: var(--gold); }
+        .logo img {
+            height: 36px;
+            width: auto;
+        }
 
         .nav-links { display: flex; gap: 2rem; align-items: center; }
         .nav-links a {
@@ -585,7 +588,9 @@
 
 <!-- NAV -->
 <nav>
-    <div class="logo">Fvg<span>Gold</span></div>
+    <a href="/" class="logo">
+        <img src="logo.svg" alt="FvgGold" height="36" style="display:block">
+    </a>
     <div class="nav-links">
         <a href="#features">Features</a>
         <a href="#backtest">Backtest</a>
