@@ -642,22 +642,24 @@ double NormalizeLot(double lot)
    if(minLot <= 0) minLot = 0.01;
    if(maxLot <= 0) maxLot = 100.0;
 
-   // Round to nearest valid step
+   // Round down to nearest valid step
    if(lotStep > 0)
       lot = MathFloor(lot / lotStep) * lotStep;
 
-   // Clamp to min/max
-   lot = MathMax(lot, minLot);
+   // Clamp: minimum is lotStep (not minLot), because minLot may be
+   // smaller than lotStep and thus not a valid volume
+   double validMin = MathMax(minLot, lotStep);
+   lot = MathMax(lot, validMin);
    lot = MathMin(lot, maxLot);
 
-   // Ensure lot is a multiple of step (safety)
+   // Final rounding to ensure exact step alignment
    if(lotStep > 0)
       lot = MathFloor(lot / lotStep) * lotStep;
 
-   // Final safety: must be >= minLot
-   if(lot < minLot) lot = minLot;
+   // Last resort: if still below validMin, use validMin
+   if(lot < validMin) lot = validMin;
 
-   return(NormalizeDouble(lot, 2));
+   return(lot);
 }
 
 //+------------------------------------------------------------------+
@@ -672,10 +674,9 @@ bool IsValidLot(double lot)
    if(lotStep <= 0) lotStep = 0.01;
    if(minLot <= 0) minLot = 0.01;
 
-   if(lot < minLot) return false;
+   if(lot < lotStep) return false;
    if(lot > maxLot) return false;
 
-   // Check if lot is a valid multiple of step
    double remainder = MathMod(lot, lotStep);
    if(remainder > 0.0000001 && MathAbs(lotStep - remainder) > 0.0000001)
       return false;
