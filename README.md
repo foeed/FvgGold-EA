@@ -224,6 +224,20 @@ Yes. FvgGold is **open source** under the MIT License. You can use, modify, and 
 
 ---
 
+## Why FvgGold?
+
+Most free XAUUSD EAs are either black-box indicators or basic grid systems that blow accounts. FvgGold is different:
+
+- **Transparent** — full MQL5 source code, no hidden logic
+- **Quality over quantity** — 0-100 scoring system filters out weak setups
+- **Institutional concepts** — FVG + Order Block + killzone (Smart Money / ICT methodology)
+- **Risk-first** — daily loss limit, break-even management, fixed R:R
+- **Backtested** — +48.7% on 6 months, verified with 64 trades
+
+Whether you're building your own EA, learning algorithmic trading, or just want a free gold bot to run — FvgGold is a solid starting point.
+
+---
+
 ## Files
 
 ```
@@ -257,4 +271,13 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-**Keywords:** XAUUSD EA, gold trading bot, Fair Value Gap, FVG trading, Order Block, MetaTrader 5 EA, algorithmic trading, forex bot, MQL5 expert advisor, gold scalping EA, MT5 trading system
+## Related
+
+- [FvgGold Landing Page](https://foeed.github.io/FvgGold-EA/) — interactive web demo
+- [MetaTrader 5 Docs](https://www.metatrader5.com/en/help)
+- [MQL5 Reference](https://www.mql5.com/en/docs)
+- [Fair Value Gap Explained (ICT)](https://www.investopedia.com/terms/f/fair-value-gap.asp)
+
+---
+
+**Keywords:** XAUUSD EA, gold trading bot, Fair Value Gap, FVG trading, Order Block, MetaTrader 5 EA, algorithmic trading, forex bot, MQL5 expert advisor, gold scalping EA, MT5 trading system, gold EA free, xauusd strategy, fvg indicator, smart money concepts, ICT trading, institutional trading, gold algo, metatrader robot, forex expert advisor free, xauusd bot, gold trading system 2026, best XAUUSD EA, free forex EA open source

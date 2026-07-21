@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Sitemap: https://foeed.github.io/FvgGold-EA/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /

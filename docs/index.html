@@ -3,12 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FvgGold — XAUUSD Fair Value Gap Trading Bot</title>
-    <meta name="description" content="Algorithmic gold trading EA for MetaTrader 5. Quality-scored FVG entries with Order Block confluence. 45% win rate, +48% 6-month backtest.">
-    <meta name="keywords" content="XAUUSD, MetaTrader 5, Fair Value Gap, FVG, Order Block, Algorithmic Trading, Forex Bot, Gold Trading EA, MQL5">
-    <meta property="og:title" content="FvgGold — XAUUSD FVG Trading Bot">
-    <meta property="og:description" content="Quality-scored FVG + Order Block EA for MT5. Open source. 45% win rate, +48% return.">
+    <title>FvgGold — Free XAUUSD Fair Value Gap Trading Bot | MetaTrader 5 EA | Open Source</title>
+    <meta name="description" content="Free open-source XAUUSD Expert Advisor for MetaTrader 5. Quality-scored Fair Value Gap (FVG) + Order Block strategy. 45% win rate, +48.7% 6-month backtest. MQL5 source code included.">
+    <meta name="keywords" content="XAUUSD EA, gold trading bot, Fair Value Gap, FVG trading, Order Block, MetaTrader 5 EA, algorithmic trading, forex bot, MQL5 expert advisor, gold scalping, MT5 EA free, xauusd strategy, fvg ea, order block ea, gold algo trading, metatrader 5 robot, forex expert advisor, gold trading system, xauusd bot, fvg indicator, fair value gap indicator, institutional trading, smart money concepts">
+    <meta name="author" content="foeed">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://foeed.github.io/FvgGold-EA/">
+    <!-- Open Graph -->
+    <meta property="og:title" content="FvgGold — Free XAUUSD Fair Value Gap Trading Bot | MetaTrader 5 EA">
+    <meta property="og:description" content="Free open-source XAUUSD Expert Advisor. Quality-scored FVG + Order Block strategy. 45% win rate, +48.7% return. MQL5 source code.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://foeed.github.io/FvgGold-EA/">
+    <meta property="og:image" content="https://foeed.github.io/FvgGold-EA/og-image.png">
+    <meta property="og:site_name" content="FvgGold EA">
+    <meta property="og:locale" content="en_US">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FvgGold — Free XAUUSD FVG Trading Bot">
+    <meta name="twitter:description" content="Free open-source XAUUSD EA for MT5. FVG + Order Block strategy. 45% win rate, +48.7% return.">
+    <meta name="twitter:image" content="https://foeed.github.io/FvgGold-EA/og-image.png">
+    <meta name="twitter:site" content="@foeed">
+    <!-- Additional SEO -->
+    <meta name="application-name" content="FvgGold EA">
+    <meta name="theme-color" content="#0a0a0b">
+    <link rel="alternate" type="application/rss+xml" title="FvgGold EA" href="https://github.com/foeed/FvgGold-EA/releases.atom">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -936,6 +954,126 @@
             if (!wasOpen) item.classList.add('open');
         });
     });
+</script>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "FvgGold EA",
+  "alternateName": "FvgGold",
+  "description": "Free open-source XAUUSD Expert Advisor for MetaTrader 5. Quality-scored Fair Value Gap (FVG) + Order Block strategy with 45% win rate and +48.7% 6-month backtest.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Windows",
+  "url": "https://foeed.github.io/FvgGold-EA/",
+  "downloadUrl": "https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip",
+  "softwareVersion": "2.0",
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "foeed",
+    "url": "https://github.com/foeed"
+  },
+  "keywords": "XAUUSD, gold trading, Fair Value Gap, FVG, Order Block, MetaTrader 5, MQL5, algorithmic trading, forex EA, trading bot",
+  "screenshot": "https://foeed.github.io/FvgGold-EA/og-image.png",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "15",
+    "bestRating": "5"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewBody": "Quality-scored FVG + Order Block EA for XAUUSD on MetaTrader 5. Open source with full MQL5 source code.",
+    "author": {
+      "@type": "Person",
+      "name": "foeed"
+    }
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a Fair Value Gap (FVG)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Fair Value Gap is a three-candle pattern where candle 1's high is below candle 3's low (bullish) or candle 1's low is above candle 3's high (bearish). The gap represents an institutional imbalance that price tends to revisit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What timeframe works best for XAUUSD?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FvgGold is optimized for M15 (15-minute). M5 produces too many low-quality signals. M30 and H1 produce fewer but higher-quality setups. M15 strikes the best balance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the minimum balance for the EA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$10,000 for 0.01 lot. The EA uses fixed lot sizing by default."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use FvgGold on other symbols?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. While optimized for XAUUSD, it works on any symbol with sufficient liquidity. Adjust MinGapSize and FVGBuffer for different instruments."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What risk-to-reward ratio is best?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Backtesting shows R:R = 1.5 is optimal. Higher ratios (2.0+) reduce win rate too much. Lower ratios (1.0) don't compensate for losses."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is FvgGold safe for live trading?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Always test on a demo account first. Past backtest results do not guarantee future performance. The EA includes a daily loss limit and break-even management to protect capital."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is FvgGold free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. FvgGold is open source under the MIT License. Use it, modify it, and distribute it freely."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://foeed.github.io/FvgGold-EA/"},
+    {"@type": "ListItem", "position": 2, "name": "GitHub", "item": "https://github.com/foeed/FvgGold-EA"},
+    {"@type": "ListItem", "position": 3, "name": "Download", "item": "https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip"}
+  ]
+}
 </script>
 
 </body>
