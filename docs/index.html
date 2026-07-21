@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FvgGold — XAUUSD Fair Value Gap Trading Bot</title>
+    <meta name="description" content="Algorithmic gold trading EA for MetaTrader 5. Quality-scored FVG entries with Order Block confluence. 45% win rate, +48% 6-month backtest.">
+    <meta name="keywords" content="XAUUSD, MetaTrader 5, Fair Value Gap, FVG, Order Block, Algorithmic Trading, Forex Bot, Gold Trading EA, MQL5">
+    <meta property="og:title" content="FvgGold — XAUUSD FVG Trading Bot">
+    <meta property="og:description" content="Quality-scored FVG + Order Block EA for MT5. Open source. 45% win rate, +48% return.">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0a0a0b;
+            --bg-card: #111113;
+            --bg-card-hover: #18181b;
+            --border: #27272a;
+            --text: #fafafa;
+            --text-muted: #a1a1aa;
+            --gold: #f59e0b;
+            --gold-dim: #b45309;
+            --green: #22c55e;
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --radius: 12px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAV === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span { color: var(--gold); }
+
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: #000;
+        }
+        .btn-primary:hover { background: #fbbf24; transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--text-muted); background: var(--bg-card); }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--gold), #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+        /* === STATS BAR === */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .stat { text-align: center; }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: -1px;
+        }
+        .stat-value.green { color: var(--green); }
+        .stat-value.gold { color: var(--gold); }
+        .stat-value.blue { color: var(--blue); }
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.25rem;
+        }
+
+        /* === SECTIONS === */
+        section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        /* === FEATURES GRID === */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            transition: background 0.2s;
+        }
+        .feature-card:hover { background: var(--bg-card-hover); }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* === HOW IT WORKS === */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step:last-child { border-bottom: none; }
+
+        .step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gold);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .step code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+        }
+
+        /* === BACKTEST === */
+        .backtest-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .backtest-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .backtest-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .backtest-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--green);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .backtest-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .backtest-table th {
+            text-align: left;
+            padding: 0.875rem 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .backtest-table td {
+            padding: 1rem 2rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .backtest-table tr:last-child td { border-bottom: none; }
+        .backtest-table tr:hover { background: var(--bg-card-hover); }
+
+        .backtest-table .period { font-family: 'Inter', sans-serif; color: var(--text); font-weight: 500; }
+        .backtest-table .highlight-row { background: rgba(245, 158, 11, 0.03); }
+
+        /* === PARAMS === */
+        .params-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .param-group {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .param-group h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .param-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8125rem;
+        }
+
+        .param-row:last-child { border-bottom: none; }
+        .param-row .name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+        }
+        .param-row .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        /* === FAQ === */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .faq-question:hover { background: var(--bg-card-hover); }
+
+        .faq-arrow {
+            transition: transform 0.2s;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+        }
+
+        .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-inner {
+            padding: 0 1.5rem 1.25rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer { max-height: 300px; }
+
+        /* === CTA === */
+        .cta {
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* === FOOTER === */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        footer a { color: var(--text); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
+
+        /* === CODE BLOCK === */
+        .code-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.8;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        .code-block .comment { color: #52525b; }
+        .code-block .cmd { color: var(--green); }
+        .code-block .path { color: var(--gold); }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .stats-bar { gap: 1.5rem; }
+            .stat-value { font-size: 1.5rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .params-grid { grid-template-columns: 1fr; }
+            .step { grid-template-columns: 1fr; gap: 1rem; }
+            .backtest-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .backtest-table th, .backtest-table td { padding: 0.75rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="logo">Fvg<span>Gold</span></div>
+    <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#backtest">Backtest</a>
+        <a href="#install">Install</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-outline" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub
+        </a>
+        <a href="https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip" class="btn btn-primary">Download</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="badge">
+        <div class="badge-dot"></div>
+        Open Source &middot; MIT License
+    </div>
+    <h1>
+        <span class="highlight">Fair Value Gap</span><br>
+        Trading Bot for Gold
+    </h1>
+    <p>
+        Algorithmic XAUUSD Expert Advisor for MetaTrader 5. Quality-scored FVG entries with Order Block confluence and London/NY killzone timing.
+    </p>
+    <div class="hero-buttons">
+        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-primary" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            View on GitHub
+        </a>
+        <a href="#install" class="btn btn-outline">Installation Guide &rarr;</a>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-value green">+48.7%</div>
+        <div class="stat-label">6-Month Return</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value gold">45.3%</div>
+        <div class="stat-label">Win Rate</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value blue">64</div>
+        <div class="stat-label">Total Trades</div>
+    </div>
+    <div class="stat">
+        <div class="stat-value" style="color:var(--purple)">1.5</div>
+        <div class="stat-label">Risk:Reward</div>
+    </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Institutional-Grade Strategy</h2>
+    <p class="section-desc">Every setup is scored on a 0-100 quality scale. Only the best FVGs with Order Block confluence are traded.</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:var(--gold)">&#9650;</div>
+            <h3>Quality Scoring</h3>
+            <p>Each FVG is scored across 5 factors: gap size, displacement, HTF alignment, freshness, and premium/discount zone.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(168,85,247,0.1);color:var(--purple)">&#9632;</div>
+            <h3>Order Block Confluence</h3>
+            <p>+20 score bonus when FVG overlaps an institutional Order Block. Filters out weak setups automatically.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(59,130,246,0.1);color:var(--blue)">&#8644;</div>
+            <h3>HTF Trend Filter</h3>
+            <p>H1 EMA 50/200 trend alignment. Only trades in the direction of the higher timeframe bias.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(34,197,94,0.1);color:var(--green)">&#9200;</div>
+            <h3>Killzone Timing</h3>
+            <p>London open, NY overlap, and session end filters. Only trades during peak institutional activity windows.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(239,68,68,0.1);color:var(--red)">&#9888;</div>
+            <h3>Risk Management</h3>
+            <p>Fixed R:R take-profit, daily loss limit, break-even management, and max trade caps protect your capital.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:var(--gold)">&#9881;</div>
+            <h3>Open Source</h3>
+            <p>MIT License. Full MQL5 source code included. Modify, extend, or learn from it freely.</p>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section>
+    <div class="section-label">Strategy</div>
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-desc">From detection to execution, every step is quality-controlled.</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">01</div>
+            <div>
+                <h3>FVG Detection</h3>
+                <p>Scans M15 for three-candle imbalance patterns (Fair Value Gaps). Each gap is measured by size relative to ATR and filtered by minimum size threshold.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">02</div>
+            <div>
+                <h3>Quality Scoring</h3>
+                <p>Every detected FVG is scored 0-100 across five weighted components: gap size, candle displacement, H1 EMA alignment, zone freshness, and premium/discount positioning.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">03</div>
+            <div>
+                <h3>Order Block Confluence</h3>
+                <p>The EA checks for nearby Order Blocks (institutional supply/demand zones). If an OB overlaps the FVG, the score jumps by +20 points.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">04</div>
+            <div>
+                <h3>Session Filter</h3>
+                <p>Only activates during London open (07-10 GMT), London/NY overlap (12-16 GMT), or NY session (up to 21 GMT). Peak liquidity windows only.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">05</div>
+            <div>
+                <h3>Entry & Management</h3>
+                <p>Places a limit order near the FVG edge (not midpoint) with fixed 1.5 R:R. Moves to break-even at 0.5x ATR profit. Closes all at session end if enabled.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BACKTEST -->
+<section id="backtest">
+    <div class="section-label">Performance</div>
+    <h2 class="section-title">Backtest Results</h2>
+    <p class="section-desc">XAUUSD.m, M15, 0.01 lot, $1,000 starting balance.</p>
+
+    <div class="backtest-card">
+        <div class="backtest-header">
+            <h3>XAUUSD &middot; M15 &middot; 2026</h3>
+            <div class="backtest-tag">Backtested</div>
+        </div>
+        <table class="backtest-table">
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Start</th>
+                    <th>Final</th>
+                    <th>Return</th>
+                    <th>Win Rate</th>
+                    <th>Trades</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="period">3-Month (Apr &ndash; Jul)</td>
+                    <td>$1,000</td>
+                    <td>$1,052</td>
+                    <td style="color:var(--green)">+5.2%</td>
+                    <td>40.0%</td>
+                    <td>35</td>
+                </tr>
+                <tr class="highlight-row">
+                    <td class="period"><strong>6-Month (Jan &ndash; Jul)</strong></td>
+                    <td><strong>$1,000</strong></td>
+                    <td><strong>$1,487</strong></td>
+                    <td style="color:var(--green)"><strong>+48.7%</strong></td>
+                    <td><strong>45.3%</strong></td>
+                    <td><strong>64</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top:1.5rem; padding:1rem 1.5rem; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); font-size:0.8125rem; color:var(--text-muted);">
+        <strong style="color:var(--text)">Optimized parameters:</strong> MinScoreFVG=50 &middot; R:R=1.5 &middot; FVGBuffer=3.0 &middot; FixedLot=0.01
+    </div>
+</section>
+
+<!-- INSTALL -->
+<section id="install">
+    <div class="section-label">Getting Started</div>
+    <h2 class="section-title">Installation</h2>
+    <p class="section-desc">Up and running in under 2 minutes.</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">01</div>
+            <div>
+                <h3>Download & Copy</h3>
+                <p>Download <code>FvgGold.mq5</code> from the repo and copy it to your MT5 Experts folder:</p>
+                <div class="code-block">
+                    <span class="comment"># Windows path:</span><br>
+                    <span class="path">C:\Users\&lt;You&gt;\AppData\Roaming\MetaQuotes\Terminal\&lt;ID&gt;\MQL5\Experts\</span>
+                </div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">02</div>
+            <div>
+                <h3>Compile</h3>
+                <p>Open MetaTrader 5, press <strong>F4</strong> to open MetaEditor. Open <code>FvgGold.mq5</code> and press <strong>Compile</strong> (F7). Verify: 0 errors.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">03</div>
+            <div>
+                <h3>Attach to Chart</h3>
+                <p>Open a <strong>XAUUSD M15</strong> chart. Drag <code>FvgGold</code> from the Navigator. Enable <strong>Allow Algo Trading</strong>. Click OK.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-number">04</div>
+            <div>
+                <h3>Load Optimized Settings (Optional)</h3>
+                <p>In the EA inputs tab, click <strong>Load</strong> and select <code>FvgGold.set</code> for pre-optimized parameters.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PARAMS -->
+<section>
+    <div class="section-label">Configuration</div>
+    <h2 class="section-title">Key Parameters</h2>
+    <p class="section-desc">All parameters are configurable. Defaults are optimized for XAUUSD M15.</p>
+
+    <div class="params-grid">
+        <div class="param-group">
+            <h3><span style="color:var(--gold)">&#9650;</span> FVG Detection</h3>
+            <div class="param-row"><span class="name">FVGTimeframe</span><span class="value">M15</span></div>
+            <div class="param-row"><span class="name">MinGapSize</span><span class="value">25</span></div>
+            <div class="param-row"><span class="name">MaxAgeBars</span><span class="value">20</span></div>
+            <div class="param-row"><span class="name">FVGBuffer</span><span class="value">3.0</span></div>
+        </div>
+        <div class="param-group">
+            <h3><span style="color:var(--purple)">&#9632;</span> Quality Scoring</h3>
+            <div class="param-row"><span class="name">MinScoreFVG</span><span class="value">50</span></div>
+            <div class="param-row"><span class="name">ScoreGapWeight</span><span class="value">30</span></div>
+            <div class="param-row"><span class="name">ScoreDispWeight</span><span class="value">30</span></div>
+            <div class="param-row"><span class="name">ScoreHTFWeight</span><span class="value">20</span></div>
+        </div>
+        <div class="param-group">
+            <h3><span style="color:var(--green)">&#9888;</span> Risk Management</h3>
+            <div class="param-row"><span class="name">FixedLot</span><span class="value">0.01</span></div>
+            <div class="param-row"><span class="name">RiskRewardRatio</span><span class="value">1.5</span></div>
+            <div class="param-row"><span class="name">DailyLossLimit</span><span class="value">$5.00</span></div>
+            <div class="param-row"><span class="name">MaxTrades</span><span class="value">1</span></div>
+        </div>
+        <div class="param-group">
+            <h3><span style="color:var(--blue)">&#9200;</span> Killzone</h3>
+            <div class="param-row"><span class="name">London</span><span class="value">07:00 - 10:00</span></div>
+            <div class="param-row"><span class="name">Overlap</span><span class="value">12:00 - 16:00</span></div>
+            <div class="param-row"><span class="name">NY Close</span><span class="value">21:00</span></div>
+            <div class="param-row"><span class="name">PreferOverlap</span><span class="value">true</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-desc">Common questions about FvgGold.</p>
+
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-question">
+                What is a Fair Value Gap (FVG)?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">A Fair Value Gap is a three-candle pattern where candle 1's high is below candle 3's low (bullish) or candle 1's low is above candle 3's high (bearish). The gap between them represents an institutional imbalance that price tends to revisit.</div>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                What timeframe works best?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">FvgGold is optimized for <strong>M15</strong> (15-minute). M5 produces too many low-quality signals. M30 and H1 produce fewer but higher-quality setups. M15 strikes the best balance.</div>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                What's the minimum balance?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner"><strong>$1,000</strong> for 0.01 lot. The EA uses fixed lot sizing by default. You can adjust FixedLot or switch to risk-based sizing by setting FixedLot=0.</div>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                Can I use it on other symbols?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Yes. While optimized for XAUUSD, it works on any symbol with sufficient liquidity. Adjust <code>MinGapSize</code> and <code>FVGBuffer</code> for different instruments.</div>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                What risk-to-reward ratio is best?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Backtesting shows <strong>R:R = 1.5</strong> is optimal. Higher ratios (2.0+) reduce win rate too much. Lower ratios (1.0) don't compensate for losses.</div>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                Is this safe for live trading?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Always test on a <strong>demo account first</strong>. Past backtest results do not guarantee future performance. The EA includes a daily loss limit and break-even management to protect capital.</div>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                Is it free?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Yes. FvgGold is <strong>open source</strong> under the MIT License. Use it, modify it, and distribute it freely.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <h2>Start Trading Smarter</h2>
+    <p>Free, open-source, and ready to use. Download FvgGold and backtest it yourself.</p>
+    <div class="hero-buttons">
+        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-primary" target="_blank">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            View on GitHub
+        </a>
+        <a href="https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip" class="btn btn-outline">Download ZIP</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>FvgGold &middot; MIT License &middot; Built with MQL5 &middot; <a href="https://github.com/foeed/FvgGold-EA" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.parentElement;
+            const wasOpen = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+            if (!wasOpen) item.classList.add('open');
+        });
+    });
+</script>
+
+</body>
+</html>
