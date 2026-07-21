@@ -674,12 +674,10 @@ bool IsValidLot(double lot)
    if(lotStep <= 0) lotStep = 0.01;
    if(minLot <= 0) minLot = 0.01;
 
-   if(lot < lotStep) return false;
-   if(lot > maxLot) return false;
+   double validMin = MathMax(minLot, lotStep);
 
-   double remainder = MathMod(lot, lotStep);
-   if(remainder > 0.0000001 && MathAbs(lotStep - remainder) > 0.0000001)
-      return false;
+   if(lot < validMin - 0.0000001) return false;
+   if(lot > maxLot + 0.0000001) return false;
 
    return true;
 }
