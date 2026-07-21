@@ -84,12 +84,12 @@ The EA only trades during **London/NY killzones** (configurable in GMT):
 
 ## Backtest Results
 
-All results on **XAUUSD.m, M15 timeframe**, 0.01 lot, starting balance $1,000.
+All results on **XAUUSD.m, M15 timeframe**, 0.01 lot, starting balance $10,000.
 
 | Period | Start Balance | Final Balance | Return | Win Rate | Trades |
 |--------|---------------|---------------|--------|----------|--------|
-| 3-month (Apr–Jul 2026) | $1,000 | $1,052.20 | +5.2% | 40.0% | 35 |
-| **6-month (Jan–Jul 2026)** | **$1,000** | **$1,487.40** | **+48.7%** | **45.3%** | **64** |
+| 3-month (Apr–Jul 2026) | $10,000 | $10,522.00 | +5.2% | 40.0% | 35 |
+| **6-month (Jan–Jul 2026)** | **$10,000** | **$14,874.00** | **+48.7%** | **45.3%** | **64** |
 
 **Optimized parameters:** `MinScoreFVG=50`, `RiskRewardRatio=1.5`, `FVGBuffer=3.0`, `FixedLot=0.01`
 
@@ -199,7 +199,7 @@ FvgGold is optimized for **M15** (15-minute). Higher timeframes like M30 and H1 
 
 ### What is the minimum balance needed?
 
-**$1,000** for 0.01 lot. The EA uses fixed lot sizing by default.
+**$10,000** for 0.01 lot. The EA uses fixed lot sizing by default.
 
 ### Can I use this on other symbols?
 
@@ -235,7 +235,7 @@ FvgGold-EA/
 
 - **MetaTrader 5** (build 3000+)
 - Broker with **XAUUSD** symbol
-- Minimum balance: **$1,000** (for 0.01 lot)
+- Minimum balance: **$10,000** (for 0.01 lot)
 - Windows OS (for MT5)
 
 ---
