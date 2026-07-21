@@ -599,7 +599,24 @@ void DrawFVG(FVGZone &fvg)
 //+------------------------------------------------------------------+
 double CalcLot(double slDistance)
 {
-   if(FixedLot > 0) return(FixedLot);
+   double minLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MIN);
+   double maxLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MAX);
+   double lotStep = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_STEP);
+
+   if(lotStep <= 0) lotStep = 0.01;
+   if(minLot <= 0) minLot = 0.01;
+
+   double lot = 0;
+
+   if(FixedLot > 0)
+   {
+      lot = FixedLot;
+      lot = MathFloor(lot / lotStep) * lotStep;
+      lot = MathMax(lot, minLot);
+      lot = MathMin(lot, maxLot);
+      return(NormalizeDouble(lot, 2));
+   }
+
    if(slDistance <= 0) return(0);
 
    double bal = AccountInfoDouble(ACCOUNT_BALANCE);
@@ -609,11 +626,7 @@ double CalcLot(double slDistance)
    double tickSize = SymbolInfoDouble(Symbol(), SYMBOL_TRADE_TICK_SIZE);
    if(tickVal <= 0 || tickSize <= 0) return(0);
 
-   double lot = riskMoney / (slDistance / tickSize * tickVal);
-
-   double minLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MIN);
-   double maxLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MAX);
-   double lotStep = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_STEP);
+   lot = riskMoney / (slDistance / tickSize * tickVal);
 
    if(lotStep > 0) lot = MathFloor(lot / lotStep) * lotStep;
    lot = MathMax(lot, minLot);
