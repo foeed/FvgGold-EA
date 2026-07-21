@@ -611,29 +611,76 @@ double CalcLot(double slDistance)
    if(FixedLot > 0)
    {
       lot = FixedLot;
-      lot = MathFloor(lot / lotStep) * lotStep;
-      lot = MathMax(lot, minLot);
-      lot = MathMin(lot, maxLot);
-      return(NormalizeDouble(lot, 2));
+   }
+   else if(slDistance > 0)
+   {
+      double bal = AccountInfoDouble(ACCOUNT_BALANCE);
+      double riskMoney = bal * RiskPercent / 100.0;
+
+      double tickVal  = SymbolInfoDouble(Symbol(), SYMBOL_TRADE_TICK_VALUE);
+      double tickSize = SymbolInfoDouble(Symbol(), SYMBOL_TRADE_TICK_SIZE);
+      if(tickVal <= 0 || tickSize <= 0) return(0);
+
+      lot = riskMoney / (slDistance / tickSize * tickVal);
+      double maxLotByBalance = MathMin(0.10, bal * 0.01);
+      lot = MathMin(lot, maxLotByBalance);
    }
 
-   if(slDistance <= 0) return(0);
+   return NormalizeLot(lot);
+}
 
-   double bal = AccountInfoDouble(ACCOUNT_BALANCE);
-   double riskMoney = bal * RiskPercent / 100.0;
+//+------------------------------------------------------------------+
+//| Normalize lot to valid volume step                                |
+//+------------------------------------------------------------------+
+double NormalizeLot(double lot)
+{
+   double minLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MIN);
+   double maxLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MAX);
+   double lotStep = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_STEP);
 
-   double tickVal  = SymbolInfoDouble(Symbol(), SYMBOL_TRADE_TICK_VALUE);
-   double tickSize = SymbolInfoDouble(Symbol(), SYMBOL_TRADE_TICK_SIZE);
-   if(tickVal <= 0 || tickSize <= 0) return(0);
+   if(lotStep <= 0) lotStep = 0.01;
+   if(minLot <= 0) minLot = 0.01;
+   if(maxLot <= 0) maxLot = 100.0;
 
-   lot = riskMoney / (slDistance / tickSize * tickVal);
+   // Round to nearest valid step
+   if(lotStep > 0)
+      lot = MathFloor(lot / lotStep) * lotStep;
 
-   if(lotStep > 0) lot = MathFloor(lot / lotStep) * lotStep;
+   // Clamp to min/max
    lot = MathMax(lot, minLot);
    lot = MathMin(lot, maxLot);
-   double maxLotByBalance = MathMin(0.10, bal * 0.01);
-   lot = MathMin(lot, maxLotByBalance);
+
+   // Ensure lot is a multiple of step (safety)
+   if(lotStep > 0)
+      lot = MathFloor(lot / lotStep) * lotStep;
+
+   // Final safety: must be >= minLot
+   if(lot < minLot) lot = minLot;
+
    return(NormalizeDouble(lot, 2));
+}
+
+//+------------------------------------------------------------------+
+//| Validate lot before placing order                                |
+//+------------------------------------------------------------------+
+bool IsValidLot(double lot)
+{
+   double minLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MIN);
+   double maxLot  = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_MAX);
+   double lotStep = SymbolInfoDouble(Symbol(), SYMBOL_VOLUME_STEP);
+
+   if(lotStep <= 0) lotStep = 0.01;
+   if(minLot <= 0) minLot = 0.01;
+
+   if(lot < minLot) return false;
+   if(lot > maxLot) return false;
+
+   // Check if lot is a valid multiple of step
+   double remainder = MathMod(lot, lotStep);
+   if(remainder > 0.0000001 && MathAbs(lotStep - remainder) > 0.0000001)
+      return false;
+
+   return true;
 }
 
 //+------------------------------------------------------------------+
@@ -696,6 +743,8 @@ void PlaceFVGOrder(FVGZone &fvg)
 
       double lot = CalcLot(slDist);
       if(lot <= 0) return;
+      lot = NormalizeLot(lot);
+      if(!IsValidLot(lot)) { Print("Invalid lot: ", DoubleToString(lot, 2)); return; }
       double tp = UseFixedRR ? entry + slDist * RiskRewardRatio : entry + tpDist;
 
       if(trade.BuyLimit(lot, entry, Symbol(), sl, tp, ORDER_TIME_GTC, 0, tag))
@@ -714,6 +763,8 @@ void PlaceFVGOrder(FVGZone &fvg)
 
       double lot = CalcLot(slDist);
       if(lot <= 0) return;
+      lot = NormalizeLot(lot);
+      if(!IsValidLot(lot)) { Print("Invalid lot: ", DoubleToString(lot, 2)); return; }
       double tp = UseFixedRR ? entry - slDist * RiskRewardRatio : entry - tpDist;
 
       if(trade.SellLimit(lot, entry, Symbol(), sl, tp, ORDER_TIME_GTC, 0, tag))
