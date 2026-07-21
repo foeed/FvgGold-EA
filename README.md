@@ -2,11 +2,16 @@
 
 **Algorithmic gold trading EA** that identifies high-probability Fair Value Gap setups with Order Block confluence, H1 EMA trend filter, and London/NY killzone timing. Built for XAUUSD on MetaTrader 5.
 
+[![Website](https://img.shields.io/badge/Website-foeed.github.io/FvgGold-EA-blue.svg)](https://foeed.github.io/FvgGold-EA/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-MetaTrader%205-blue.svg)](https://www.metatrader5.com/)
 [![Symbol](https://img.shields.io/badge/Symbol-XAUUSD-gold.svg)]()
 [![Win Rate](https://img.shields.io/badge/Win%20Rate-45.3%25-green.svg)]()
 [![Return](https://img.shields.io/badge/6%20Month%20Return-%2B48.7%25-brightgreen.svg)]()
+
+---
+
+> **[View Landing Page](https://foeed.github.io/FvgGold-EA/)** — modern UI with interactive demo
 
 ---
 
@@ -225,6 +230,8 @@ Yes. FvgGold is **open source** under the MIT License. You can use, modify, and 
 FvgGold-EA/
 ├── FvgGold.mq5       # EA source code (MQL5)
 ├── FvgGold.set       # Optimized parameter set
+├── docs/
+│   └── index.html    # Landing page (GitHub Pages)
 ├── LICENSE            # MIT License
 └── README.md          # This file
 ```
