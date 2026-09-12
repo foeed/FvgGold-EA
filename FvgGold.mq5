@@ -6,7 +6,7 @@
 //+------------------------------------------------------------------+
 #property copyright "FvgGold"
 #property link      ""
-#property version   "2.00"
+#property version   "2.01"
 #property strict
 #property description "Fair Value Gap EA v2 — Quality FVG + OB Confluence + Killzone"
 
@@ -20,7 +20,7 @@ input int    MinAgeBars      = 2;         // Min FVG age (bars since formation)
 input double FVGBuffer       = 3.0;       // Buffer beyond FVG edge for SL (price units, e.g. $3.00)
 
 //--- Inputs: FVG quality --------------------------------------------+
-input double MinScoreFVG     = 55.0;      // Minimum FVG quality score (0-100)
+input double MinScoreFVG     = 50.0;      // Minimum FVG quality score (0-100)
 input double ScoreGapWeight  = 30.0;      // Score weight: gap size (0-30)
 input double ScoreDispWeight = 30.0;      // Score weight: displacement (0-30)
 input double ScoreHTFWeight  = 20.0;      // Score weight: HTF alignment (0-20)
@@ -46,7 +46,7 @@ input double RiskPercent     = 0.5;       // Risk per trade (if FixedLot=0)
 input int    MaxTrades       = 1;         // Max concurrent trades
 input double DailyLossLimit  = 5.0;       // Daily loss limit ($) (0=off)
 input double ATR_TP_Mult     = 2.0;       // TP = ATR * this multiplier
-input double RiskRewardRatio = 2.0;       // TP = entry + SL_distance * this (fixed R:R)
+input double RiskRewardRatio = 1.5;       // TP = entry + SL_distance * this (fixed R:R)
 input bool   UseFixedRR      = true;      // Use fixed R:R instead of ATR for TP
 
 //--- Inputs: Killzone ------------------------------------------------+
@@ -56,7 +56,7 @@ input int    KZ_LondonEnd    = 10;        // London open end (GMT)
 input int    KZ_OverlapStart = 12;        // London/NY overlap start (GMT)
 input int    KZ_OverlapEnd   = 16;        // London/NY overlap end (GMT)
 input int    KZ_NYEnd        = 21;        // NY session end (GMT)
-input bool   KZ_PreferOverlap= true;      // Only trade overlap (highest quality)
+input bool   KZ_PreferOverlap= false;     // Only trade overlap (highest quality)
 input bool   CloseAtEOD      = false;     // Close all at session end
 
 //--- Inputs: Misc ----------------------------------------------------+
@@ -94,11 +94,9 @@ int       hATR_htf     = INVALID_HANDLE;
 
 FVGZone   fvgZones[];
 OrderBlock obZones[];
-int       maxZones = 200;
 
 double    dailyPL       = 0.0;
 datetime  dailyDate     = 0;
-int       todayTrades   = 0;
 
 //+------------------------------------------------------------------+
 //| Expert initialization                                             |
@@ -126,7 +124,7 @@ int OnInit()
    dailyPL = 0;
    dailyDate = 0;
 
-   Print("FvgGold v2.0 | TF=", EnumToString(FVGTimeframe),
+   Print("FvgGold v2.01 | TF=", EnumToString(FVGTimeframe),
          " HTF=", EnumToString(HTF_Period),
          " MinScore=", DoubleToString(MinScoreFVG, 0),
          " OB=", (UseOBFilter ? "ON" : "OFF"),
@@ -203,7 +201,6 @@ void UpdateDailyPL()
    if(today != dailyDate)
    {
       dailyPL = 0;
-      todayTrades = 0;
       dailyDate = today;
    }
 }
@@ -742,15 +739,19 @@ void PlaceFVGOrder(FVGZone &fvg)
 
       double lot = CalcLot(slDist);
       if(lot <= 0) return;
-      lot = NormalizeLot(lot);
       if(!IsValidLot(lot)) { Print("Invalid lot: ", DoubleToString(lot, 2)); return; }
       double tp = UseFixedRR ? entry + slDist * RiskRewardRatio : entry + tpDist;
 
       if(trade.BuyLimit(lot, entry, Symbol(), sl, tp, ORDER_TIME_GTC, 0, tag))
+      {
+         fvg.orderPlaced = true;
          Print("FVG Buy: ", tag, " @ ", DoubleToString(entry, 2),
                " SL=", DoubleToString(sl, 2), " TP=", DoubleToString(tp, 2),
                " Score=", DoubleToString(fvg.score, 0),
                " R:R=", DoubleToString((tp - entry) / (entry - sl), 1));
+      }
+      else
+         Print("BuyLimit failed: ", tag, " retcode=", IntegerToString(trade.ResultRetcode()));
    }
    else
    {
@@ -762,18 +763,20 @@ void PlaceFVGOrder(FVGZone &fvg)
 
       double lot = CalcLot(slDist);
       if(lot <= 0) return;
-      lot = NormalizeLot(lot);
       if(!IsValidLot(lot)) { Print("Invalid lot: ", DoubleToString(lot, 2)); return; }
       double tp = UseFixedRR ? entry - slDist * RiskRewardRatio : entry - tpDist;
 
       if(trade.SellLimit(lot, entry, Symbol(), sl, tp, ORDER_TIME_GTC, 0, tag))
+      {
+         fvg.orderPlaced = true;
          Print("FVG Sell: ", tag, " @ ", DoubleToString(entry, 2),
                " SL=", DoubleToString(sl, 2), " TP=", DoubleToString(tp, 2),
                " Score=", DoubleToString(fvg.score, 0),
                " R:R=", DoubleToString((entry - tp) / (sl - entry), 1));
+      }
+      else
+         Print("SellLimit failed: ", tag, " retcode=", IntegerToString(trade.ResultRetcode()));
    }
-
-   fvg.orderPlaced = true;
 }
 
 //+------------------------------------------------------------------+
@@ -844,6 +847,7 @@ void CloseEOD()
 void TrackDailyPL()
 {
    HistorySelect(dailyDate, TimeCurrent());
+   double pl = 0;
    for(int i = HistoryDealsTotal() - 1; i >= 0; i--)
    {
       ulong tk = HistoryDealGetTicket(i);
@@ -852,10 +856,11 @@ void TrackDailyPL()
       if(HistoryDealGetString(tk, DEAL_SYMBOL) != Symbol()) continue;
       datetime dealTime = (datetime)HistoryDealGetInteger(tk, DEAL_TIME);
       if(dealTime < dailyDate) continue;
-      dailyPL += HistoryDealGetDouble(tk, DEAL_PROFIT)
-               + HistoryDealGetDouble(tk, DEAL_SWAP)
-               + HistoryDealGetDouble(tk, DEAL_COMMISSION);
+      pl += HistoryDealGetDouble(tk, DEAL_PROFIT)
+          + HistoryDealGetDouble(tk, DEAL_SWAP)
+          + HistoryDealGetDouble(tk, DEAL_COMMISSION);
    }
+   dailyPL = pl;
 }
 
 //+------------------------------------------------------------------+
@@ -883,7 +888,7 @@ void UpdateDashboard()
       if(london || overlap || ny) sessionStr = "ACTIVE";
    }
 
-   string s = "=== FvgGold v2.0 ===\n";
+   string s = "=== FvgGold v2.01 ===\n";
    s += "Bias: " + biasStr + " | Exec: " + EnumToString(FVGTimeframe) + "\n";
    s += "ATR: " + DoubleToString(atr, 2) + " | Session: " + sessionStr + "\n";
    s += "FVGs: " + IntegerToString(ArraySize(fvgZones)) + " | OBs: " + IntegerToString(ArraySize(obZones)) + "\n";
@@ -913,7 +918,12 @@ void OnTick()
 {
    UpdateDailyPL();
    TrackDailyPL();
-   if(IsDailyLimitHit()) return;
+
+   //--- Always manage open positions and end-of-day close ---
+   ManagePositions();
+   CloseEOD();
+
+   if(IsDailyLimitHit()) { UpdateDashboard(); return; }
 
    //--- Detect structure ---
    DetectOrderBlocks();
@@ -938,15 +948,5 @@ void OnTick()
       PlaceFVGOrder(fvgZones[i]);
    }
 
-   ManagePositions();
-   CloseEOD();
    UpdateDashboard();
 }
-
-//+------------------------------------------------------------------+
-void OnTimer()
-{
-   DetectOrderBlocks();
-   DetectFVGs();
-}
-//+------------------------------------------------------------------+

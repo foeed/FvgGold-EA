@@ -69,10 +69,10 @@ Only setups scoring **above MinScoreFVG (default: 50)** are considered for entry
 
 ### 2. Entry Logic
 
-- **Buy limit** placed at FVG bottom edge + buffer (enters near the zone, not the midpoint)
-- **Sell limit** placed at FVG top edge - buffer
+- **Buy limit** placed just above FVG bottom edge (entry = bottom + half buffer)
+- **Sell limit** placed just below FVG top edge (entry = top − half buffer)
 - Fixed **R:R = 1.5** take-profit from entry
-- Stop-loss placed at FVG edge minus buffer (price units)
+- Stop-loss placed beyond the opposite FVG edge by buffer (price units)
 
 ### 3. Session Filter
 
@@ -192,7 +192,7 @@ C:\Users\<YourUser>\AppData\Roaming\MetaQuotes\Terminal\<TerminalID>\MQL5\Expert
 | `KZ_OverlapStart` | 12 | London/NY overlap start (GMT) |
 | `KZ_OverlapEnd` | 16 | London/NY overlap end (GMT) |
 | `KZ_NYEnd` | 21 | NY session end (GMT) |
-| `KZ_PreferOverlap` | true | Only trade during overlap window |
+| `KZ_PreferOverlap` | false | Only trade during overlap window |
 
 ---
 

@@ -107,7 +107,7 @@ KZ_LondonEnd (int) — London open end hour (GMT). Default: 10.
 KZ_OverlapStart (int) — London/NY overlap start hour (GMT). Default: 12.
 KZ_OverlapEnd (int) — London/NY overlap end hour (GMT). Default: 16.
 KZ_NYEnd (int) — NY session end hour (GMT). Default: 21.
-KZ_PreferOverlap (bool) — Only trade during overlap window (highest quality). Default: true.
+KZ_PreferOverlap (bool) — Only trade during overlap window (highest quality). Default: false.
 CloseAtEOD (bool) — Close all positions at session end. Default: false.
 
 ### Miscellaneous
