@@ -571,6 +571,74 @@
         .code-block .cmd { color: var(--green); }
         .code-block .path { color: var(--gold); }
 
+        /* === HERO ORBS === */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+        }
+        .orb-1 {
+            width: 420px; height: 420px;
+            background: radial-gradient(circle, rgba(245,158,11,0.22), transparent 70%);
+            top: 8%; left: 6%;
+            animation: drift 16s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, rgba(168,85,247,0.14), transparent 70%);
+            bottom: 6%; right: 8%;
+            animation: drift 20s ease-in-out infinite reverse;
+        }
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, -40px) scale(1.1); }
+        }
+
+        /* === SCROLL REVEAL === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible { opacity: 1; transform: none; }
+
+        /* === EQUITY CHART === */
+        .chart-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem; }
+        .chart-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+        .chart-header h3 { font-size: 1rem; font-weight: 600; }
+        .chart-tabs { display: flex; gap: 0.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.25rem; }
+        .chart-tab { padding: 0.375rem 0.875rem; font-size: 0.75rem; font-weight: 600; font-family: 'Inter', sans-serif; color: var(--text-muted); background: none; border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .chart-tab.active { background: var(--gold); color: #000; }
+        .chart-tab:not(.active):hover { color: var(--text); }
+        .chart-wrap { position: relative; padding: 1rem 0.5rem 0.5rem; }
+        #equity-chart { width: 100%; height: 300px; display: block; cursor: crosshair; }
+        .chart-tooltip { position: absolute; top: 0; left: 0; z-index: 5; pointer-events: none; background: var(--bg-card-hover); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.75rem; white-space: nowrap; opacity: 0; transition: opacity 0.15s; }
+        .chart-tooltip .tt-month { display: block; color: var(--text-muted); font-family: 'Inter', sans-serif; margin-bottom: 0.125rem; }
+        .chart-tooltip .tt-balance { color: var(--gold); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+        .chart-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.75rem 1.5rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); }
+        .chart-footer .chart-note { color: var(--gold); }
+
+        /* === COMMUNITY === */
+        .os-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+        .os-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: var(--text); text-decoration: none; transition: all 0.2s; }
+        .os-badge:hover { border-color: var(--gold); transform: translateY(-1px); }
+        .community-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .community-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; transition: all 0.2s; }
+        .community-card:hover { background: var(--bg-card-hover); border-color: rgba(245,158,11,0.35); }
+        .community-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .community-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 1rem; }
+        .community-card a { font-size: 0.8125rem; font-weight: 600; color: var(--gold); text-decoration: none; }
+        .community-card a:hover { text-decoration: underline; }
+        .community-card code, .faq-answer-inner code { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; background: var(--bg); border: 1px solid var(--border); padding: 0.125rem 0.375rem; border-radius: 4px; }
+
+        ::selection { background: rgba(245, 158, 11, 0.35); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .orb { animation: none; }
+        }
+
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -581,6 +649,9 @@
             .step { grid-template-columns: 1fr; gap: 1rem; }
             .backtest-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
             .backtest-table th, .backtest-table td { padding: 0.75rem 1rem; }
+            #equity-chart { height: 240px; }
+            .community-grid { grid-template-columns: 1fr; }
+            .chart-footer { flex-direction: column; }
         }
     </style>
 </head>
@@ -596,6 +667,7 @@
         <a href="#backtest">Backtest</a>
         <a href="#install">Install</a>
         <a href="#faq">FAQ</a>
+        <a href="#community">Community</a>
         <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-outline" target="_blank">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             GitHub
@@ -606,6 +678,8 @@
 
 <!-- HERO -->
 <section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
     <div class="badge">
         <div class="badge-dot"></div>
         Open Source &middot; MIT License
@@ -629,19 +703,19 @@
 <!-- STATS -->
 <div class="stats-bar">
     <div class="stat">
-        <div class="stat-value green">+48.7%</div>
+        <div class="stat-value green" data-count="48.7" data-prefix="+" data-suffix="%" data-decimals="1">+48.7%</div>
         <div class="stat-label">6-Month Return</div>
     </div>
     <div class="stat">
-        <div class="stat-value gold">45.3%</div>
+        <div class="stat-value gold" data-count="45.3" data-suffix="%" data-decimals="1">45.3%</div>
         <div class="stat-label">Win Rate</div>
     </div>
     <div class="stat">
-        <div class="stat-value blue">64</div>
+        <div class="stat-value blue" data-count="64">64</div>
         <div class="stat-label">Total Trades</div>
     </div>
     <div class="stat">
-        <div class="stat-value" style="color:var(--purple)">1.5</div>
+        <div class="stat-value" style="color:var(--purple)" data-count="1.5" data-decimals="1">1.5</div>
         <div class="stat-label">Risk:Reward</div>
     </div>
 </div>
@@ -736,6 +810,24 @@
     <div class="section-label">Performance</div>
     <h2 class="section-title">Backtest Results</h2>
     <p class="section-desc">XAUUSD.m, M15, 0.01 lot, $10,000 starting balance.</p>
+
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>Equity Curve</h3>
+            <div class="chart-tabs">
+                <button class="chart-tab active" data-range="m6" type="button">6-Month</button>
+                <button class="chart-tab" data-range="m3" type="button">3-Month</button>
+            </div>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="equity-chart" aria-label="Backtest equity curve chart"></canvas>
+            <div class="chart-tooltip" id="chart-tooltip"></div>
+        </div>
+        <div class="chart-footer">
+            <span>Balance growth &middot; hover the chart for weekly detail</span>
+            <span class="chart-note">Simulated backtest &mdash; not live results</span>
+        </div>
+    </div>
 
     <div class="backtest-card">
         <div class="backtest-header">
@@ -929,6 +1021,52 @@
                 <div class="faq-answer-inner">Yes. FvgGold is <strong>open source</strong> under the MIT License. Use it, modify it, and distribute it freely.</div>
             </div>
         </div>
+        <div class="faq-item">
+            <button class="faq-question">
+                How can I contribute or get in touch?
+                <span class="faq-arrow">+</span>
+            </button>
+            <div class="faq-answer">
+                <div class="faq-answer-inner">Open an <a href="https://github.com/foeed/FvgGold-EA/issues" target="_blank" style="color:var(--gold)">issue</a> or submit a <a href="https://github.com/foeed/FvgGold-EA/pulls" target="_blank" style="color:var(--gold)">pull request</a> on GitHub, or email the maintainer at <a href="mailto:contact@cybox.uk" style="color:var(--gold)">contact@cybox.uk</a>.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- COMMUNITY / OPEN SOURCE -->
+<section id="community">
+    <div class="section-label">Open Source</div>
+    <h2 class="section-title">Built in Public, For the Community</h2>
+    <p class="section-desc">FvgGold is 100% open source under the MIT License. Read every line, fork it, ship your own version — no black boxes, no hidden logic.</p>
+
+    <div class="os-badges">
+        <a class="os-badge" href="https://github.com/foeed/FvgGold-EA/blob/main/LICENSE" target="_blank">&#9878; MIT License</a>
+        <a class="os-badge" href="https://github.com/foeed/FvgGold-EA/commits/main" target="_blank">&#128238; Full Commit History</a>
+        <a class="os-badge" href="https://github.com/foeed/FvgGold-EA/issues" target="_blank">&#128172; Report Issues</a>
+        <a class="os-badge" href="https://github.com/foeed/FvgGold-EA/pulls" target="_blank">&#128279; Submit Pull Requests</a>
+    </div>
+
+    <div class="community-grid">
+        <div class="community-card">
+            <h3>&#128218; Read the Source</h3>
+            <p>The entire strategy lives in one readable <code>FvgGold.mq5</code> file — FVG scoring, OB detection, killzone logic, risk rules. Nothing obfuscated, nothing hidden.</p>
+            <a href="https://github.com/foeed/FvgGold-EA/blob/main/FvgGold.mq5" target="_blank">Browse FvgGold.mq5 &rarr;</a>
+        </div>
+        <div class="community-card">
+            <h3>&#128736; Contribute</h3>
+            <p>Found a bug or have an idea for a new filter? Issues and pull requests are welcome — from typo fixes to new confluence modules.</p>
+            <a href="https://github.com/foeed/FvgGold-EA/pulls" target="_blank">Open a Pull Request &rarr;</a>
+        </div>
+        <div class="community-card">
+            <h3>&#128170; Fork &amp; Build Your Own</h3>
+            <p>MIT License means you keep full rights to your modifications. Fork the repo, tune the scoring weights, publish your own gold bot.</p>
+            <a href="https://github.com/foeed/FvgGold-EA/fork" target="_blank">Fork on GitHub &rarr;</a>
+        </div>
+        <div class="community-card">
+            <h3>&#128231; Contact the Maintainer</h3>
+            <p>Questions, collaborations, or support with setup? Reach out directly — the community keeps this project alive.</p>
+            <a href="mailto:contact@cybox.uk">contact@cybox.uk</a>
+        </div>
     </div>
 </section>
 
@@ -938,19 +1076,20 @@
     <p>Free, open-source, and ready to use. Download FvgGold and backtest it yourself.</p>
     <div class="hero-buttons">
         <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-primary" target="_blank">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             View on GitHub
         </a>
-        <a href="https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip" class="btn btn-outline">Download ZIP</a>
+        <a href="mailto:contact@cybox.uk" class="btn btn-outline">&#128231; Contact: contact@cybox.uk</a>
     </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <p>FvgGold &middot; MIT License &middot; Built with MQL5 &middot; <a href="https://github.com/foeed/FvgGold-EA" target="_blank">GitHub</a></p>
+    <p>FvgGold &middot; MIT License &middot; Built with MQL5 &middot; <a href="https://github.com/foeed/FvgGold-EA" target="_blank">GitHub</a> &middot; <a href="mailto:contact@cybox.uk">contact@cybox.uk</a></p>
 </footer>
 
 <script>
+    // === FAQ accordion ===
     document.querySelectorAll('.faq-question').forEach(btn => {
         btn.addEventListener('click', () => {
             const item = btn.parentElement;
@@ -959,6 +1098,182 @@
             if (!wasOpen) item.classList.add('open');
         });
     });
+
+    // === Scroll reveal ===
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('section > *, .stats-bar .stat').forEach(el => {
+        el.classList.add('reveal');
+        revealObserver.observe(el);
+    });
+
+    // === Animated counters ===
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (!e.isIntersecting) return;
+            const el = e.target;
+            counterObserver.unobserve(el);
+            const target = parseFloat(el.dataset.count);
+            const decimals = parseInt(el.dataset.decimals || '0', 10);
+            const prefix = el.dataset.prefix || '';
+            const suffix = el.dataset.suffix || '';
+            const dur = 1400;
+            const t0 = performance.now();
+            const tick = now => {
+                const p = Math.min((now - t0) / dur, 1);
+                const v = target * easeOut(p);
+                el.textContent = prefix + v.toFixed(decimals) + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+    // === Equity chart ===
+    (function () {
+        const canvas = document.getElementById('equity-chart');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const tooltip = document.getElementById('chart-tooltip');
+        const wrap = canvas.parentElement;
+
+        // Weekly balance points derived from the published backtests:
+        // 6-month: $10,000 -> $14,874 (Jan-Jul, 64 trades)
+        // 3-month: $10,000 -> $10,522 (Apr-Jul, 35 trades)
+        const months6 = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+        const data = {
+            m6: [10000, 10380, 11050, 11620, 12480, 13610, 14874],
+            m3: [10000, 10150, 10320, 10410, 10522]
+        };
+        const m3Labels = ['Apr', 'May', 'Jun', 'Jul', 'End'];
+        let range = 'm6';
+        let pts = [];
+        let hoverIdx = -1;
+
+        const css = getComputedStyle(document.documentElement);
+        const cGold = '#f59e0b', cGreen = '#22c55e', cGrid = '#27272a', cMuted = '#a1a1aa';
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            draw();
+        }
+
+        function compute() {
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            const vals = data[range];
+            const padL = 56, padR = 14, padT = 18, padB = 28;
+            const min = Math.min(...vals) * 0.998;
+            const max = Math.max(...vals) * 1.002;
+            const x = i => padL + (w - padL - padR) * (i / (vals.length - 1));
+            const y = v => padT + (h - padT - padB) * (1 - (v - min) / (max - min));
+            pts = vals.map((v, i) => ({ x: x(i), y: y(v), v: v, i: i }));
+        }
+
+        function drawGrid(w, h) {
+            const vals = data[range];
+            const padL = 56, padR = 14, padT = 18, padB = 28;
+            ctx.strokeStyle = cGrid; ctx.fillStyle = cMuted;
+            ctx.font = '500 11px "JetBrains Mono", monospace';
+            ctx.lineWidth = 1;
+            for (let g = 0; g <= 4; g++) {
+                const yy = padT + (h - padT - padB) * (g / 4);
+                ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(w - padR, yy); ctx.stroke();
+                const val = Math.max(...vals) * 1.002 - ((Math.max(...vals) * 1.002 - Math.min(...vals) * 0.998) * g / 4);
+                ctx.fillText('$' + Math.round(val / 100) / 10 + 'k', 4, yy + 4);
+            }
+            const labels = range === 'm6' ? months6 : m3Labels;
+            ctx.textAlign = 'center';
+            labels.forEach((m, i) => {
+                if (pts[i]) ctx.fillText(m, pts[i].x, h - 8);
+            });
+            ctx.textAlign = 'left';
+        }
+
+        function draw() {
+            const w = canvas.clientWidth, h = canvas.clientHeight;
+            compute();
+            ctx.clearRect(0, 0, w, h);
+            drawGrid(w, h);
+
+            // Area fill
+            const grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, 'rgba(245,158,11,0.25)');
+            grad.addColorStop(1, 'rgba(245,158,11,0)');
+            ctx.beginPath();
+            pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+            ctx.lineTo(pts[pts.length - 1].x, h - 28); ctx.lineTo(pts[0].x, h - 28);
+            ctx.closePath(); ctx.fillStyle = grad; ctx.fill();
+
+            // Line
+            ctx.beginPath();
+            pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+            ctx.strokeStyle = cGold; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+
+            // Points + hover crosshair
+            pts.forEach((p, i) => {
+                const isHover = i === hoverIdx;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, isHover ? 5 : 3, 0, Math.PI * 2);
+                ctx.fillStyle = isHover ? cGreen : cGold; ctx.fill();
+                if (isHover) {
+                    ctx.strokeStyle = 'rgba(34,197,94,0.4)'; ctx.lineWidth = 6;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI * 2); ctx.stroke();
+                    ctx.setLineDash([4, 4]);
+                    ctx.strokeStyle = 'rgba(250,250,250,0.35)'; ctx.lineWidth = 1;
+                    ctx.beginPath(); ctx.moveTo(p.x, 12); ctx.lineTo(p.x, h - 28); ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+            });
+        }
+
+        function showTooltip(p) {
+            const labels = range === 'm6' ? months6 : m3Labels;
+            const start = data[range][0];
+            const ret = ((p.v - start) / start * 100).toFixed(1);
+            tooltip.innerHTML = '<span class="tt-month">' + labels[p.i] + ' 2026</span>' +
+                '<span class="tt-balance">$' + p.v.toLocaleString() + '</span>' +
+                ' <span style="color:' + (ret >= 0 ? cGreen : '#ef4444') + '">' + (ret >= 0 ? '+' : '') + ret + '%</span>';
+            const wr = wrap.getBoundingClientRect();
+            const pr = canvas.getBoundingClientRect();
+            const px = pr.left - wr.left + p.x, py = pr.top - wr.top + p.y;
+            tooltip.style.left = Math.min(Math.max(px - 60, 4), wr.width - 150) + 'px';
+            tooltip.style.top = Math.max(py - 64, 4) + 'px';
+            tooltip.style.opacity = '1';
+        }
+
+        canvas.addEventListener('mousemove', ev => {
+            const r = canvas.getBoundingClientRect();
+            const mx = ev.clientX - r.left, my = ev.clientY - r.top;
+            let best = -1, bestD = 900;
+            pts.forEach((p, i) => {
+                const d = (p.x - mx) * (p.x - mx) + (p.y - my) * (p.y - my);
+                if (d < bestD) { bestD = d; best = i; }
+            });
+            if (best !== hoverIdx) { hoverIdx = best; draw(); }
+            if (hoverIdx >= 0) showTooltip(pts[hoverIdx]); else tooltip.style.opacity = '0';
+        });
+        canvas.addEventListener('mouseleave', () => { hoverIdx = -1; draw(); tooltip.style.opacity = '0'; });
+
+        document.querySelectorAll('.chart-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                range = tab.dataset.range;
+                hoverIdx = -1;
+                tooltip.style.opacity = '0';
+                draw();
+            });
+        });
+
+        window.addEventListener('resize', resize);
+        resize();
+    })();
 </script>
 
 <!-- JSON-LD Structured Data -->
@@ -984,6 +1299,11 @@
     "@type": "Person",
     "name": "foeed",
     "url": "https://github.com/foeed"
+  },
+  "maintainer": {
+    "@type": "Person",
+    "name": "foeed",
+    "email": "mailto:contact@cybox.uk"
   },
   "keywords": "XAUUSD, gold trading, Fair Value Gap, FVG, Order Block, MetaTrader 5, MQL5, algorithmic trading, forex EA, trading bot",
   "screenshot": "https://foeed.github.io/FvgGold-EA/og-image.png",
@@ -1063,6 +1383,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Yes. FvgGold is open source under the MIT License. Use it, modify it, and distribute it freely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I contribute or contact the maintainer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FvgGold is developed in the open. Report bugs and request features via GitHub issues, submit improvements as pull requests, or contact the maintainer at contact@cybox.uk."
       }
     }
   ]

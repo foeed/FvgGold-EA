@@ -273,6 +273,8 @@ FvgGold-EA/
 
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
+Contact: [contact@cybox.uk](mailto:contact@cybox.uk)
+
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
