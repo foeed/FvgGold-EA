@@ -7,6 +7,7 @@
 **Algorithmic gold trading EA** that identifies high-probability Fair Value Gap setups with Order Block confluence, H1 EMA trend filter, and London/NY killzone timing. Built for XAUUSD on MetaTrader 5.
 
 [![Website](https://img.shields.io/badge/Website-foeed.github.io/FvgGold-EA-blue.svg)](https://foeed.github.io/FvgGold-EA/)
+[![MQL5 Market](https://img.shields.io/badge/MQL5_Market-Free_Download-green.svg)](https://www.mql5.com/en/market/product/186778)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-MetaTrader%205-blue.svg)](https://www.metatrader5.com/)
 [![Symbol](https://img.shields.io/badge/Symbol-XAUUSD-gold.svg)]()
@@ -14,6 +15,8 @@
 [![Return](https://img.shields.io/badge/6%20Month%20Return-%2B48.7%25-brightgreen.svg)]()
 
 ---
+
+> **[Get it on MQL5 Market](https://www.mql5.com/en/market/product/186778)** — free 1-click download for MetaTrader 5 (recommended)
 
 > **[View Landing Page](https://foeed.github.io/FvgGold-EA/)** — modern UI with interactive demo
 
@@ -120,6 +123,15 @@ All results on **XAUUSD.m, M15 timeframe**, 0.01 lot, starting balance $10,000.
 ---
 
 ## Installation
+
+### Option A: MQL5 Market (recommended)
+
+1. Open **[FvgGold on MQL5 Market](https://www.mql5.com/en/market/product/186778)**
+2. Click **Download** (free) — MetaTrader 5 installs/updates the EA automatically
+3. In MT5 Navigator go to **Expert Advisors → Market**, drag `FvgGold` onto a **XAUUSD M15** chart
+4. Enable **"Allow Algo Trading"** and click **OK**
+
+### Option B: Manual install from GitHub
 
 ### Step 1: Copy the EA file
 
@@ -297,6 +309,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 ## Related
 
 - [FvgGold Landing Page](https://foeed.github.io/FvgGold-EA/) — interactive web demo
+- [FvgGold on MQL5 Market](https://www.mql5.com/en/market/product/186778) — free 1-click install for MT5
 - [MetaTrader 5 Docs](https://www.metatrader5.com/en/help)
 - [MQL5 Reference](https://www.mql5.com/en/docs)
 - [Fair Value Gap Explained (ICT)](https://www.investopedia.com/terms/f/fair-value-gap.asp)

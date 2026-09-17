@@ -51,16 +51,27 @@
             --blue: #3b82f6;
             --purple: #a855f7;
             --radius: 12px;
+            --radius-lg: 16px;
+            --shadow-gold: 0 8px 24px rgba(245, 158, 11, 0.25);
+            --content-max: 1100px;
         }
 
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; scroll-padding-top: 84px; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        a:focus-visible, button:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 3px;
+            border-radius: 6px;
         }
 
         /* === NAV === */
@@ -69,13 +80,15 @@
             top: 0;
             width: 100%;
             z-index: 100;
-            padding: 1rem 2rem;
-            background: rgba(10, 10, 11, 0.8);
+            padding: 0.875rem 1.5rem;
+            background: rgba(10, 10, 11, 0.82);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
         }
 
         .logo {
@@ -88,53 +101,61 @@
             width: auto;
         }
 
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links { display: flex; gap: 1.5rem; align-items: center; }
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
             transition: color 0.2s;
+            white-space: nowrap;
         }
         .nav-links a:hover { color: var(--text); }
+        .nav-cta { display: none; }
 
         .btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 8px;
+            padding: 0.75rem 1.4rem;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            line-height: 1.2;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
             cursor: pointer;
-            border: none;
+            border: 1px solid transparent;
         }
+
+        .btn-sm { padding: 0.5625rem 1rem; font-size: 0.8125rem; border-radius: 8px; }
 
         .btn-primary {
             background: var(--gold);
             color: #000;
         }
-        .btn-primary:hover { background: #fbbf24; transform: translateY(-1px); }
+        .btn-primary:hover { background: #fbbf24; transform: translateY(-1px); box-shadow: var(--shadow-gold); }
+        .btn-primary:active { transform: translateY(0); box-shadow: none; }
 
         .btn-outline {
             background: transparent;
             color: var(--text);
             border: 1px solid var(--border);
         }
-        .btn-outline:hover { border-color: var(--text-muted); background: var(--bg-card); }
+        .btn-outline:hover { border-color: var(--text-muted); background: var(--bg-card); transform: translateY(-1px); }
 
         /* === HERO === */
         .hero {
-            min-height: 100vh;
+            min-height: 92vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 8rem 2rem 4rem;
+            padding: 7rem 1.5rem 3.5rem;
             position: relative;
+            max-width: var(--content-max);
         }
 
         .hero::before {
@@ -177,12 +198,13 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.5rem, 6vw, 4.25rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.08;
+            margin-bottom: 1.25rem;
             max-width: 800px;
+            text-wrap: balance;
         }
 
         .hero h1 .highlight {
@@ -195,12 +217,23 @@
         .hero p {
             font-size: 1.125rem;
             color: var(--text-muted);
-            max-width: 560px;
-            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
             line-height: 1.7;
+            text-wrap: pretty;
         }
 
-        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .hero-buttons { display: flex; gap: 0.875rem; flex-wrap: wrap; justify-content: center; margin-bottom: 1rem; }
+        .hero-sub-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .hero-sub-link:hover { color: var(--gold); border-color: var(--gold); }
 
         /* === STATS BAR === */
         .stats-bar {
@@ -233,9 +266,10 @@
 
         /* === SECTIONS === */
         section {
-            max-width: 1100px;
+            max-width: var(--content-max);
             margin: 0 auto;
-            padding: 5rem 2rem;
+            padding: 4.5rem 1.5rem;
+            scroll-margin-top: 70px;
         }
 
         .section-label {
@@ -265,8 +299,9 @@
         .video-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: var(--radius-lg);
             overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
         }
         .video-wrap {
             position: relative;
@@ -298,6 +333,41 @@
         }
         .video-footer p strong { color: var(--text); }
 
+        /* === INSTALL OPTIONS === */
+        .install-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .install-card {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.625rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        .install-card:hover { transform: translateY(-2px); border-color: rgba(245, 158, 11, 0.4); background: var(--bg-card-hover); }
+        .install-card h3 { font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.01em; }
+        .install-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 0.5rem; }
+        .install-card p code, .install-card h3 code { font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; background: var(--bg); border: 1px solid var(--border); padding: 0.125rem 0.375rem; border-radius: 4px; }
+        .install-card-primary { border-color: rgba(245, 158, 11, 0.45); background: linear-gradient(180deg, rgba(245,158,11,0.08), var(--bg-card) 60%); }
+        .install-card-primary:hover { box-shadow: var(--shadow-gold); }
+        .install-card-tag {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+        }
+        .install-manual-title { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+
         /* === FEATURES GRID === */
         .features-grid {
             display: grid;
@@ -312,9 +382,9 @@
         .feature-card {
             background: var(--bg-card);
             padding: 2rem;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.2s;
         }
-        .feature-card:hover { background: var(--bg-card-hover); }
+        .feature-card:hover { background: var(--bg-card-hover); transform: translateY(-2px); }
 
         .feature-icon {
             width: 40px;
@@ -665,8 +735,8 @@
         .os-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 999px; font-size: 0.8125rem; font-weight: 600; color: var(--text); text-decoration: none; transition: all 0.2s; }
         .os-badge:hover { border-color: var(--gold); transform: translateY(-1px); }
         .community-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
-        .community-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; transition: all 0.2s; }
-        .community-card:hover { background: var(--bg-card-hover); border-color: rgba(245,158,11,0.35); }
+        .community-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; transition: transform 0.2s, border-color 0.2s, background 0.2s; }
+        .community-card:hover { background: var(--bg-card-hover); border-color: rgba(245,158,11,0.35); transform: translateY(-2px); }
         .community-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
         .community-card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 1rem; }
         .community-card a { font-size: 0.8125rem; font-weight: 600; color: var(--gold); text-decoration: none; }
@@ -683,6 +753,15 @@
         /* === RESPONSIVE === */
         @media (max-width: 768px) {
             .nav-links { display: none; }
+            .nav-cta { display: inline-flex; }
+            nav { padding: 0.75rem 1rem; }
+            .hero { padding: 6rem 1.25rem 3rem; }
+            .hero-buttons { flex-direction: column; align-items: stretch; width: 100%; max-width: 420px; }
+            .hero-buttons .btn { width: 100%; }
+            section { padding: 3.5rem 1.25rem; }
+            .section-title { font-size: 1.75rem; }
+            .install-options { grid-template-columns: 1fr; }
+            .video-footer { flex-direction: column; align-items: flex-start; }
             .stats-bar { gap: 1.5rem; }
             .stat-value { font-size: 1.5rem; }
             .features-grid { grid-template-columns: 1fr; }
@@ -700,7 +779,7 @@
 
 <!-- NAV -->
 <nav>
-    <a href="/" class="logo">
+    <a href="./" class="logo" aria-label="FvgGold home">
         <img src="logo.svg" alt="FvgGold" height="36" style="display:block">
     </a>
     <div class="nav-links">
@@ -710,12 +789,13 @@
         <a href="#install">Install</a>
         <a href="#faq">FAQ</a>
         <a href="#community">Community</a>
-        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-outline" target="_blank">
+        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-outline btn-sm" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             GitHub
         </a>
-        <a href="https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip" class="btn btn-primary">Download</a>
+        <a href="https://www.mql5.com/en/market/product/186778" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Get Free on MQL5</a>
     </div>
+    <a href="https://www.mql5.com/en/market/product/186778" class="btn btn-primary btn-sm nav-cta" target="_blank" rel="noopener">Get Free</a>
 </nav>
 
 <!-- HERO -->
@@ -724,22 +804,25 @@
     <div class="orb orb-2"></div>
     <div class="badge">
         <div class="badge-dot"></div>
-        Open Source &middot; MIT License
+        Free on MQL5 Market &middot; Open Source &middot; MIT License
     </div>
     <h1>
         <span class="highlight">Fair Value Gap</span><br>
         Trading Bot for Gold
     </h1>
     <p>
-        Algorithmic XAUUSD Expert Advisor for MetaTrader 5. Quality-scored FVG entries with Order Block confluence and London/NY killzone timing.
+        Algorithmic XAUUSD Expert Advisor for MetaTrader 5. Quality-scored FVG entries with Order Block confluence and London/NY killzone timing. Free 1-click install on MQL5 Market — source code on GitHub.
     </p>
     <div class="hero-buttons">
-        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-primary" target="_blank">
+        <a href="https://www.mql5.com/en/market/product/186778" class="btn btn-primary" target="_blank" rel="noopener">
+            Get Free on MQL5 Market
+        </a>
+        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-outline" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             View on GitHub
         </a>
-        <a href="#install" class="btn btn-outline">Installation Guide &rarr;</a>
     </div>
+    <a href="#demo" class="hero-sub-link">Watch the 2-min demo &darr;</a>
 </section>
 
 <!-- STATS -->
@@ -934,8 +1017,24 @@
 <section id="install">
     <div class="section-label">Getting Started</div>
     <h2 class="section-title">Installation</h2>
-    <p class="section-desc">Up and running in under 2 minutes.</p>
+    <p class="section-desc">Free download — pick the 1-click MQL5 install or the manual GitHub setup. Up and running in under 2 minutes.</p>
 
+    <div class="install-options">
+        <a href="https://www.mql5.com/en/market/product/186778" class="install-card install-card-primary" target="_blank" rel="noopener">
+            <div class="install-card-tag">Recommended &middot; 1-click</div>
+            <h3>Get it on MQL5 Market — Free</h3>
+            <p>Installs and auto-updates inside MetaTrader 5. No manual file copying. v2.0, published 25 Aug 2026.</p>
+            <span class="btn btn-primary btn-sm">Open MQL5 Market &rarr;</span>
+        </a>
+        <a href="https://github.com/foeed/FvgGold-EA" class="install-card" target="_blank" rel="noopener">
+            <div class="install-card-tag">For developers</div>
+            <h3>Manual install from GitHub</h3>
+            <p>Clone the repo, copy <code>FvgGold.mq5</code> into <code>MQL5/Experts/</code>, compile with F7.</p>
+            <span class="btn btn-outline btn-sm">Open GitHub Repo &rarr;</span>
+        </a>
+    </div>
+
+    <h3 class="install-manual-title">Manual setup — step by step</h3>
     <div class="steps">
         <div class="step">
             <div class="step-number">01</div>
@@ -1132,19 +1231,21 @@
 <!-- CTA -->
 <section class="cta">
     <h2>Start Trading Smarter</h2>
-    <p>Free, open-source, and ready to use. Download FvgGold and backtest it yourself.</p>
+    <p>Free on MQL5 Market with 1-click install — or grab the open-source code on GitHub and backtest it yourself.</p>
     <div class="hero-buttons">
-        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-primary" target="_blank">
+        <a href="https://www.mql5.com/en/market/product/186778" class="btn btn-primary" target="_blank" rel="noopener">
+            Get Free on MQL5 Market
+        </a>
+        <a href="https://github.com/foeed/FvgGold-EA" class="btn btn-outline" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             View on GitHub
         </a>
-        <a href="mailto:contact@cybox.uk" class="btn btn-outline">&#128231; Contact: contact@cybox.uk</a>
     </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <p>FvgGold &middot; MIT License &middot; Built with MQL5 &middot; <a href="https://github.com/foeed/FvgGold-EA" target="_blank">GitHub</a> &middot; <a href="mailto:contact@cybox.uk">contact@cybox.uk</a></p>
+    <p>FvgGold &middot; MIT License &middot; Built with MQL5 &middot; <a href="https://www.mql5.com/en/market/product/186778" target="_blank" rel="noopener">MQL5 Market</a> &middot; <a href="https://github.com/foeed/FvgGold-EA" target="_blank" rel="noopener">GitHub</a> &middot; <a href="mailto:contact@cybox.uk">contact@cybox.uk</a></p>
 </footer>
 
 <script>
@@ -1347,6 +1448,11 @@
   "operatingSystem": "Windows",
   "url": "https://foeed.github.io/FvgGold-EA/",
   "downloadUrl": "https://github.com/foeed/FvgGold-EA/archive/refs/heads/main.zip",
+  "sameAs": [
+    "https://github.com/foeed/FvgGold-EA",
+    "https://www.mql5.com/en/market/product/186778",
+    "https://www.youtube.com/watch?v=J1IDMgK7CHo"
+  ],
   "softwareVersion": "2.01",
   "license": "https://opensource.org/licenses/MIT",
   "offers": {
