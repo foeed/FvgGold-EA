@@ -17,11 +17,14 @@
 
 > **[View Landing Page](https://foeed.github.io/FvgGold-EA/)** — modern UI with interactive demo
 
+> **[Watch Demo Video](https://www.youtube.com/watch?v=J1IDMgK7CHo)** — GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL! (XAUUSD Setup)
+
 ---
 
 ## Table of Contents
 
 - [What is FvgGold?](#what-is-fvggold)
+- [Demo Video](#demo-video)
 - [How It Works](#how-it-works)
 - [Backtest Results](#backtest-results)
 - [Installation](#installation)
@@ -47,6 +50,16 @@ The EA scores each FVG setup on a 0–100 quality scale across five factors, the
 - Break-even management
 - Daily loss limit protection
 - On-chart dashboard with real-time session and bias info
+
+---
+
+## Demo Video
+
+**GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL! (XAUUSD Setup)**
+
+[![GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL! (XAUUSD Setup)](https://img.youtube.com/vi/J1IDMgK7CHo/maxresdefault.jpg)](https://www.youtube.com/watch?v=J1IDMgK7CHo)
+
+Watch the strategy in action: https://www.youtube.com/watch?v=J1IDMgK7CHo
 
 ---
 

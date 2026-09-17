@@ -15,6 +15,10 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://foeed.github.io/FvgGold-EA/">
     <meta property="og:image" content="https://foeed.github.io/FvgGold-EA/og-image.png">
+    <meta property="og:video" content="https://www.youtube.com/embed/J1IDMgK7CHo">
+    <meta property="og:video:url" content="https://www.youtube.com/embed/J1IDMgK7CHo">
+    <meta property="og:video:secure_url" content="https://www.youtube.com/embed/J1IDMgK7CHo">
+    <meta property="og:video:type" content="text/html">
     <meta property="og:site_name" content="FvgGold EA">
     <meta property="og:locale" content="en_US">
     <!-- Twitter Card -->
@@ -256,6 +260,43 @@
             max-width: 600px;
             margin-bottom: 3rem;
         }
+
+        /* === DEMO VIDEO === */
+        .video-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        .video-wrap {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+        }
+        .video-wrap iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .video-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .video-footer p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        .video-footer p strong { color: var(--text); }
 
         /* === FEATURES GRID === */
         .features-grid {
@@ -663,6 +704,7 @@
         <img src="logo.svg" alt="FvgGold" height="36" style="display:block">
     </a>
     <div class="nav-links">
+        <a href="#demo">Demo</a>
         <a href="#features">Features</a>
         <a href="#backtest">Backtest</a>
         <a href="#install">Install</a>
@@ -719,6 +761,23 @@
         <div class="stat-label">Risk:Reward</div>
     </div>
 </div>
+
+<!-- DEMO VIDEO -->
+<section id="demo">
+    <div class="section-label">Demo</div>
+    <h2 class="section-title">Watch the Strategy in Action</h2>
+    <p class="section-desc">GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL! (XAUUSD Setup) — live chart walkthrough of the FVG entry model.</p>
+
+    <div class="video-card">
+        <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/J1IDMgK7CHo" title="GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL! (XAUUSD Setup)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-footer">
+            <p><strong>GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL!</strong><br>Watch on YouTube for full breakdown.</p>
+            <a href="https://www.youtube.com/watch?v=J1IDMgK7CHo" class="btn btn-outline" target="_blank" rel="noopener">Watch on YouTube &rarr;</a>
+        </div>
+    </div>
+</section>
 
 <!-- FEATURES -->
 <section id="features">
@@ -1307,6 +1366,15 @@
   },
   "keywords": "XAUUSD, gold trading, Fair Value Gap, FVG, Order Block, MetaTrader 5, MQL5, algorithmic trading, forex EA, trading bot",
   "screenshot": "https://foeed.github.io/FvgGold-EA/og-image.png",
+  "subjectOf": {
+    "@type": "VideoObject",
+    "name": "GOLD JUST HIT THIS FVG – FREE ENTRY SIGNAL! (XAUUSD Setup)",
+    "description": "Live XAUUSD chart walkthrough of the FVG entry model used by the FvgGold EA.",
+    "thumbnailUrl": "https://img.youtube.com/vi/J1IDMgK7CHo/maxresdefault.jpg",
+    "uploadDate": "2026-09-17",
+    "embedUrl": "https://www.youtube.com/embed/J1IDMgK7CHo",
+    "contentUrl": "https://www.youtube.com/watch?v=J1IDMgK7CHo"
+  },
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
